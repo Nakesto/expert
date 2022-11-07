@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { BrowserRouter } from "react-router-dom";
 
 // const colors = {
 //   primary: "#314353",
@@ -18,13 +19,13 @@ const fonts = {
 
 const theme = extendTheme({ fonts });
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </ChakraProvider>
   </React.StrictMode>
 );
