@@ -12,11 +12,12 @@ const Test = () => {
           <Stack direction="column" alignItems="start" spacing="2rem">
             <Heading>Tes Depresi Untuk Mahasiswa</Heading>
             <Text fontSize="xl">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. In obcaecati beatae quis, eos ut minima libero quasi perferendis eligendi dolore iusto
-              aperiam voluptas alias, expedita, quibusdam nostrum dolorum omnis? Iure obcaecati nemo impedit natus reiciendis dolorem! Temporibus harum
-              perferendis ex qui iure, quisquam laboriosam necessitatibus non eum cupiditate facere dolores.
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. In obcaecati beatae quis, eos ut minima libero
+              quasi perferendis eligendi dolore iusto aperiam voluptas alias, expedita, quibusdam nostrum dolorum omnis?
+              Iure obcaecati nemo impedit natus reiciendis dolorem! Temporibus harum perferendis ex qui iure, quisquam
+              laboriosam necessitatibus non eum cupiditate facere dolores.
             </Text>
-            <Link to="/question">
+            <Link to="/test/question">
               <Button size="lg">Mulai Tes</Button>
             </Link>
           </Stack>

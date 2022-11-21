@@ -15,17 +15,30 @@ import {
   Spacer,
   FormControl,
   FormLabel,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { FlexMotion } from "../Shared/ChakraMotion";
 import { fade, transition } from "../Shared/Animation";
-import { answers, questions } from "../data/knowledge";
+import { answers, cfPakar, questions } from "../data/knowledge";
 import { useForm, Controller } from "react-hook-form";
 
 const Question = () => {
-  const { register, handleSubmit, control } = useForm();
+  const { handleSubmit, control } = useForm();
 
   const handleOnSubmit = (data: any) => {
     console.log(data);
+    let result = cfPakar[0] * data.answer[0];
+    for (let i = 1; i < questions.length; i++) {
+      const cfCombine = cfPakar[i] * data.answer[i];
+      if (result > 0 && cfCombine > 0) {
+        result += cfCombine * (1 - result);
+      } else if (result < 0 && cfCombine < 0) {
+        result += cfCombine * (1 + result);
+      } else {
+        result = result + cfCombine / (1 - Math.min(Math.abs(result), Math.abs(cfCombine)));
+      }
+    }
+    console.log("result", result);
   };
 
   return (
@@ -42,25 +55,38 @@ const Question = () => {
         <Container as="form" onSubmit={handleSubmit(handleOnSubmit)}>
           <VStack spacing="5rem">
             {questions.map((q, idx) => (
-              <VStack as={FormControl} alignItems="start" spacing="1.8rem" key={`Q-${idx}`}>
-                <FormLabel as={Heading} fontWeight="bold">
-                  {q}
-                </FormLabel>
-                <RadioGroup w="100%">
-                  <VStack spacing="0.8rem">
-                    {answers.map((a, idx) => (
-                      <Box bgColor="gray.50" padding="1rem" w="100%" borderRadius="15px" key={`A-${idx}`}>
-                        <Radio value={String(a.value)}>{a.label}</Radio>
-                      </Box>
-                    ))}
+              <Controller
+                key={`Q-${idx}`}
+                name={`answer[${idx}]`}
+                control={control}
+                render={({ field: { onChange, value }, fieldState: { invalid, error } }) => (
+                  <VStack as={FormControl} alignItems="start" spacing="1.8rem" key={`Q-${idx}`} isInvalid={invalid}>
+                    <FormLabel as={Heading} fontWeight="bold">
+                      {q}
+                    </FormLabel>
+                    <RadioGroup w="100%" onChange={onChange} value={value}>
+                      <VStack spacing="0.8rem">
+                        {answers.map((a, idx) => (
+                          <Box bgColor="gray.50" padding="1rem" w="100%" borderRadius="15px" key={`A-${idx}`}>
+                            <Radio value={String(a.value)}>{a.label}</Radio>
+                          </Box>
+                        ))}
+                      </VStack>
+                    </RadioGroup>
+                    {invalid && (
+                      <FormErrorMessage bgColor="red.100" borderRadius="5px" p="1rem" color="black" w="100%">
+                        {error?.message}
+                      </FormErrorMessage>
+                    )}
                   </VStack>
-                </RadioGroup>
-              </VStack>
+                )}
+                rules={{ required: "Harap pilih salah satu yang sesuai dengan kondisi kamu." }}
+              />
             ))}
           </VStack>
           <Flex mt="3rem">
             <Spacer />
-            <Button size="lg" colorScheme="teal">
+            <Button size="lg" colorScheme="teal" type="submit">
               Submit
             </Button>
           </Flex>
