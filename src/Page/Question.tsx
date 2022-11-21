@@ -23,6 +23,11 @@ import { useForm, Controller } from "react-hook-form";
 
 const Question = () => {
   const { register, handleSubmit, control } = useForm();
+
+  const handleOnSubmit = (data: any) => {
+    console.log(data);
+  };
+
   return (
     <FlexMotion h="100vh" variants={fade} animate="show" exit="hidden" initial="hidden" transition={transition}>
       <Image
@@ -34,18 +39,18 @@ const Question = () => {
         src="https://images.unsplash.com/photo-1607688387751-c1e95ae09a42?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
       />
       <Flex ml="50vw" w="50%" py="5rem" h="max-content">
-        <Container as="form">
+        <Container as="form" onSubmit={handleSubmit(handleOnSubmit)}>
           <VStack spacing="5rem">
             {questions.map((q, idx) => (
-              <VStack as={FormControl} alignItems="start" spacing="1.8rem">
+              <VStack as={FormControl} alignItems="start" spacing="1.8rem" key={`Q-${idx}`}>
                 <FormLabel as={Heading} fontWeight="bold">
                   {q}
                 </FormLabel>
-                <RadioGroup w="100%" name={`G${idx + 1}`}>
+                <RadioGroup w="100%">
                   <VStack spacing="0.8rem">
                     {answers.map((a, idx) => (
-                      <Box bgColor="gray.50" padding="1rem" w="100%" borderRadius="15px">
-                        <Radio value={a.value}>{a.label}</Radio>
+                      <Box bgColor="gray.50" padding="1rem" w="100%" borderRadius="15px" key={`A-${idx}`}>
+                        <Radio value={String(a.value)}>{a.label}</Radio>
                       </Box>
                     ))}
                   </VStack>
@@ -56,7 +61,7 @@ const Question = () => {
           <Flex mt="3rem">
             <Spacer />
             <Button size="lg" colorScheme="teal">
-              Cek Hasil
+              Submit
             </Button>
           </Flex>
         </Container>
