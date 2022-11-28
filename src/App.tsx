@@ -18,11 +18,11 @@ const App: React.FC = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/test" element={<Outlet />}>
           <Route index element={<Test />} />
-          <Route path="result" element={<Result />} />
           <Route path="question" element={<Question />} />
           <Route path="*" element={<Navigate to="/test" />} />
         </Route>
         <Route path="/" element={<PageLayout />}>
+          <Route path="result" element={<Result />} />
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="*" element={<Navigate to="/" />} />

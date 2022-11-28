@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "../Components/Footer";
@@ -7,7 +8,9 @@ const PageLayout = () => {
   return (
     <>
       <Navbar />
-      <Outlet />
+      <Box minH="80vh">
+        <Outlet />
+      </Box>
       <Footer />
     </>
   );

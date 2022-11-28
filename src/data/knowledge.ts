@@ -16,6 +16,24 @@ export const questions = [
   "Apakah kamu sering merasa kelelahan?",
 ];
 
+export const gejala = [
+  "Sedih",
+  "Pesimis",
+  "Gagal atau tidak berguna",
+  "Kehilangan kenikmatan terhadap suatu hal",
+  "Bersalah",
+  "Sedang dihukum",
+  "Sering berfirik untuk bunuh diri",
+  "Gelisah atau tidak tenang",
+  "Sering kehilangan ketertarikan terhadap suatu hal",
+  "Ragu terhadap diri mu sendiri",
+  "Kehilangan semangat dan energi",
+  "Sulit untuk bisa tidur",
+  "Tidak nafsu makan",
+  "Sulit untuk berkonsentrasi",
+  "Kelelahan",
+];
+
 export const answers = [
   {
     label: "Mungkin Tidak",

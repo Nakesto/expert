@@ -16,14 +16,18 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
+  Icon,
 } from "@chakra-ui/react";
 import { FlexMotion } from "../Shared/ChakraMotion";
 import { fade, transition } from "../Shared/Animation";
-import { answers, cfPakar, questions } from "../data/knowledge";
+import { answers, cfPakar, gejala, questions } from "../data/knowledge";
 import { useForm, Controller } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const Question = () => {
   const { handleSubmit, control } = useForm();
+  const navigate = useNavigate();
 
   const handleOnSubmit = (data: any) => {
     console.log(data);
@@ -38,18 +42,32 @@ const Question = () => {
         result = result + cfCombine / (1 - Math.min(Math.abs(result), Math.abs(cfCombine)));
       }
     }
-    console.log("result", result);
+    const testResult = {
+      certaintyFactor: result,
+      answers: questions.map((question, index) => {
+        return {
+          question: question,
+          answer: data.answer[index],
+          gejala: gejala[index],
+        };
+      }),
+    };
+    navigate("/result", { state: testResult });
   };
 
   return (
     <FlexMotion h="100vh" variants={fade} animate="show" exit="hidden" initial="hidden" transition={transition}>
+      <Button pos="fixed" top="1.5rem" left="1.5rem" zIndex={99} colorScheme="teal" onClick={() => navigate(-1)}>
+        <Icon as={IoArrowBackOutline} mr="0.2rem" />
+        Kembali
+      </Button>
       <Image
         pos="fixed"
         h="100%"
         w="50%"
         overflow="hidden"
         objectFit="cover"
-        src="https://images.unsplash.com/photo-1607688387751-c1e95ae09a42?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+        src="https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
       />
       <Flex ml="50vw" w="50%" py="5rem" h="max-content">
         <Container as="form" onSubmit={handleSubmit(handleOnSubmit)}>
