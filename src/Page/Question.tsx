@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Flex,
@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormErrorMessage,
   Icon,
+  Input,
 } from "@chakra-ui/react";
 import { FlexMotion } from "../Shared/ChakraMotion";
 import { fade, transition } from "../Shared/Animation";
@@ -26,8 +27,23 @@ import { useNavigate } from "react-router-dom";
 import { IoArrowBackOutline } from "react-icons/io5";
 
 const Question = () => {
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control, setFocus } = useForm();
+
   const navigate = useNavigate();
+
+  useEffect(() => {}, []);
+
+  window.addEventListener("load", () => {
+    const questionDOM = document.querySelectorAll(".question-group");
+    questionDOM.forEach((question) => {
+      question.addEventListener("change", () => {
+        const nextQuestion = question.nextElementSibling;
+        if (nextQuestion) {
+          nextQuestion.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+    });
+  });
 
   const handleOnSubmit = (data: any) => {
     console.log(data);
@@ -56,20 +72,34 @@ const Question = () => {
   };
 
   return (
-    <FlexMotion h="100vh" variants={fade} animate="show" exit="hidden" initial="hidden" transition={transition}>
-      <Button pos="fixed" top="1.5rem" left="1.5rem" zIndex={99} colorScheme="teal" onClick={() => navigate(-1)}>
+    <FlexMotion
+      minH="100vh"
+      variants={fade}
+      animate="show"
+      exit="hidden"
+      initial="hidden"
+      transition={transition}
+      flexDir={{ base: "column" }}
+    >
+      <Button
+        pos={{ base: "absolute", lg: "fixed" }}
+        top="1.5rem"
+        left="1.5rem"
+        zIndex={99}
+        colorScheme="teal"
+        onClick={() => navigate(-1)}
+      >
         <Icon as={IoArrowBackOutline} mr="0.2rem" />
         Kembali
       </Button>
       <Image
-        pos="fixed"
-        h="100%"
-        w="50%"
-        overflow="hidden"
+        pos={{ base: "inherit", lg: "fixed" }}
+        h={{ base: "50vh", lg: "100%" }}
+        w={{ base: "100%", lg: "50%" }}
         objectFit="cover"
         src="https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
       />
-      <Flex ml="50vw" w="50%" py="5rem" h="max-content">
+      <Box ml={{ base: 0, lg: "50%" }} w={{ base: "100%", lg: "50%" }} p={{ base: "2rem 2rem", lg: "5rem 0" }}>
         <Container as="form" onSubmit={handleSubmit(handleOnSubmit)}>
           <VStack spacing="5rem">
             {questions.map((q, idx) => (
@@ -77,27 +107,38 @@ const Question = () => {
                 key={`Q-${idx}`}
                 name={`answer[${idx}]`}
                 control={control}
-                render={({ field: { onChange, value }, fieldState: { invalid, error } }) => (
-                  <VStack as={FormControl} alignItems="start" spacing="1.8rem" key={`Q-${idx}`} isInvalid={invalid}>
-                    <FormLabel as={Heading} fontWeight="bold">
-                      {q}
-                    </FormLabel>
-                    <RadioGroup w="100%" onChange={onChange} value={value}>
-                      <VStack spacing="0.8rem">
-                        {answers.map((a, idx) => (
-                          <Box bgColor="gray.50" padding="1rem" w="100%" borderRadius="15px" key={`A-${idx}`}>
-                            <Radio value={String(a.value)}>{a.label}</Radio>
-                          </Box>
-                        ))}
-                      </VStack>
-                    </RadioGroup>
-                    {invalid && (
-                      <FormErrorMessage bgColor="red.100" borderRadius="5px" p="1rem" color="black" w="100%">
-                        {error?.message}
-                      </FormErrorMessage>
-                    )}
-                  </VStack>
-                )}
+                render={({ field: { onChange, value, ref }, fieldState: { invalid, error } }) => {
+                  return (
+                    <VStack
+                      as={FormControl}
+                      alignItems="start"
+                      spacing="1.8rem"
+                      key={`Q-${idx}`}
+                      isInvalid={invalid}
+                      className="question-group"
+                    >
+                      <FormLabel as={Heading} fontWeight="bold" fontSize="xl">
+                        {q}
+                      </FormLabel>
+                      <RadioGroup w="100%" onChange={onChange} value={value}>
+                        <VStack spacing="0.8rem">
+                          {answers.map((a, idx) => (
+                            <Box w="100%" background="gray.50" borderRadius="15px" key={`A-${idx}`} padding="1rem">
+                              <Radio value={String(a.value)} w="100%">
+                                {a.label}
+                              </Radio>
+                            </Box>
+                          ))}
+                        </VStack>
+                      </RadioGroup>
+                      {invalid && (
+                        <FormErrorMessage bgColor="red.100" borderRadius="5px" p="1rem" color="black" w="100%">
+                          {error?.message}
+                        </FormErrorMessage>
+                      )}
+                    </VStack>
+                  );
+                }}
                 rules={{ required: "Harap pilih salah satu yang sesuai dengan kondisi kamu." }}
               />
             ))}
@@ -109,7 +150,7 @@ const Question = () => {
             </Button>
           </Flex>
         </Container>
-      </Flex>
+      </Box>
     </FlexMotion>
   );
 };
