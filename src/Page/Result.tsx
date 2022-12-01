@@ -1,23 +1,44 @@
-import { Box, Center, Container, Divider, Heading, ListItem, Text, UnorderedList, VStack } from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
+import {
+  Box,
+  Center,
+  Container,
+  Divider,
+  Heading,
+  ListItem,
+  Text,
+  UnorderedList,
+  VStack,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fade, transition } from "../Shared/Animation";
 import { FlexMotion } from "../Shared/ChakraMotion";
 
 const Result: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const resultData = location.state;
+  const [diagnosa, setDiagnosa] = useState("");
 
-  const resultClass = () => {
-    if (resultData.certaintyFactor > 0.6) {
-      return "Anda mengalami stres berat";
-    } else if (resultData.certaintyFactor > 0.4) {
-      return "Anda mengalami stres sedang";
-    } else if (resultData.certaintyFactor > -0.2) {
-      return "Anda mengalami stres ringan";
+  useEffect(() => {
+    if (resultData == null) {
+      navigate("/");
     } else {
-      return "Anda tidak mengalami stress";
+      if (resultData.certaintyFactor > 0.6) {
+        setDiagnosa("Anda mengalami stres berat");
+      } else if (resultData.certaintyFactor > 0.4) {
+        setDiagnosa("Anda mengalami stres sedang");
+      } else if (resultData.certaintyFactor > -0.2) {
+        setDiagnosa("Anda mengalami stres ringan");
+      } else {
+        setDiagnosa("Anda tidak mengalami stress");
+      }
     }
-  };
+
+    return () => {
+      setDiagnosa("");
+    };
+  }, [resultData, navigate]);
 
   return (
     <Container>
@@ -29,7 +50,7 @@ const Result: React.FC = () => {
         <Box mt="2rem">
           <Heading fontSize="xl">Gejala yang dirasakan</Heading>
           <UnorderedList spacing="0.2rem" mt="1rem">
-            {resultData.answers
+            {resultData?.answers
               .filter((item: any) => Number(item.answer) > 0)
               .map((answer: any, idx: number) => (
                 <ListItem key={`gejala-${idx}`}>{answer.gejala}</ListItem>
@@ -38,7 +59,7 @@ const Result: React.FC = () => {
         </Box>
         <Box>
           <Heading fontSize="xl">Hasil Diagnosis</Heading>
-          <Text mt="1rem">{resultClass()}</Text>
+          <Text mt="1rem">{diagnosa}</Text>
         </Box>
       </VStack>
     </Container>
