@@ -56,10 +56,12 @@ const Test = () => {
           <VStack alignItems="start" spacing="2rem">
             <Heading>Tes Depresi Untuk Mahasiswa</Heading>
             <Text fontSize="xl">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. In obcaecati beatae quis, eos ut minima libero
-              quasi perferendis eligendi dolore iusto aperiam voluptas alias, expedita, quibusdam nostrum dolorum omnis?
-              Iure obcaecati nemo impedit natus reiciendis dolorem! Temporibus harum perferendis ex qui iure, quisquam
-              laboriosam necessitatibus non eum cupiditate facere dolores.
+              Mahasiswa seringkali mengalami stres sehingga menimbulkan depresi yang bersumber dari aktivitas
+              akademiknya. Kehidupan akademik, terutama dari tuntutan eksternal maupun harapannya sendiri; faktor
+              akademik yang bisa menimbulkan depresi bagi mahasiswa yaitu perubahan gaya belajar dari sekolah menengah
+              ke pendidikan tinggi, tugas-tugas perkuliahan, target pencapaian nilai, prestasi akademik, dan kebutuhan
+              untuk mengatur diri sendiri dan mengembangkan kemampuan berpikir yang lebih baik. Test Depresi ini
+              ditujukan untuk Mahasiswa yang ingin mengetahui ataupun mengecek tingkat depresinya.
             </Text>
             <Input
               ref={inputRef}

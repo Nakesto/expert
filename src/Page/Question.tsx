@@ -76,6 +76,7 @@ const Question = () => {
 
   const handleOnSubmit = (data: any) => {
     console.log(data);
+
     let result = cfPakar[0] * data.answer[0];
     for (let i = 1; i < questions.length; i++) {
       const cfCombine = cfPakar[i] * data.answer[i];
@@ -87,6 +88,7 @@ const Question = () => {
         result = result + cfCombine / (1 - Math.min(Math.abs(result), Math.abs(cfCombine)));
       }
     }
+
     const testResult = {
       certaintyFactor: result,
       answers: questions.map((question, index) => {
