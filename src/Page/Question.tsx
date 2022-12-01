@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -14,6 +14,10 @@ import {
   FormLabel,
   FormErrorMessage,
   Icon,
+  HStack,
+  Text,
+  ButtonGroup,
+  IconButton,
 } from "@chakra-ui/react";
 import { FlexMotion } from "../Shared/ChakraMotion";
 import { fade, transition } from "../Shared/Animation";
@@ -21,14 +25,18 @@ import { answers, cfPakar, gejala, questions } from "../data/knowledge";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 const Question = () => {
   const { handleSubmit, control, setFocus } = useForm();
+  const [questionDOM, setquestionDOM] = useState<NodeListOf<Element>>();
+  const [questionIndex, setquestionIndex] = useState(0);
 
   const navigate = useNavigate();
 
   const scrollTo = () => {
     const questionDOM = document.querySelectorAll(".question-group");
+    setquestionDOM(questionDOM);
     questionDOM.forEach((question) => {
       question.addEventListener("change", () => {
         const nextQuestion = question.nextElementSibling;
@@ -37,21 +45,27 @@ const Question = () => {
             behavior: "smooth",
             block: "center",
           });
+          setquestionIndex(questionIndex + 1);
         }
       });
     });
   };
 
+  const goToQuestion = (index: number) => {
+    if (questionDOM && index >= 0 && index < questionDOM.length) {
+      questionDOM[index].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      setquestionIndex(index);
+    }
+  };
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
 
-    window.addEventListener("load", scrollTo);
     window.scrollTo(0, 0);
-
-    return () => {
-      window.removeEventListener("load", scrollTo);
-      document.body.style.overflow = "auto";
-    };
+    window.addEventListener("load", scrollTo);
   }, []);
 
   const handleOnSubmit = (data: any) => {
@@ -64,9 +78,7 @@ const Question = () => {
       } else if (result < 0 && cfCombine < 0) {
         result += cfCombine * (1 + result);
       } else {
-        result =
-          result +
-          cfCombine / (1 - Math.min(Math.abs(result), Math.abs(cfCombine)));
+        result = result + cfCombine / (1 - Math.min(Math.abs(result), Math.abs(cfCombine)));
       }
     }
     const testResult = {
@@ -92,6 +104,21 @@ const Question = () => {
       transition={transition}
       flexDir={{ base: "column" }}
     >
+      <ButtonGroup isAttached variant="outline" pos="fixed" bottom="1rem" right="1rem" zIndex={99}>
+        <Button disabled>
+          Qustion {questionIndex + 1}/{questionDOM?.length}
+        </Button>
+        <IconButton
+          aria-label="Add to friends"
+          icon={<Icon as={IoIosArrowUp} />}
+          onClick={() => goToQuestion(questionIndex - 1)}
+        />
+        <IconButton
+          aria-label="Add to friends"
+          icon={<Icon as={IoIosArrowDown} />}
+          onClick={() => goToQuestion(questionIndex + 1)}
+        />
+      </ButtonGroup>
       <Button
         pos={{ base: "absolute", lg: "fixed" }}
         top="1.5rem"
@@ -119,10 +146,7 @@ const Question = () => {
                 key={`Q-${idx}`}
                 name={`answer[${idx}]`}
                 control={control}
-                render={({
-                  field: { onChange, value, ref },
-                  fieldState: { invalid, error },
-                }) => {
+                render={({ field: { onChange, value, ref }, fieldState: { invalid, error } }) => {
                   return (
                     <VStack
                       as={FormControl}
@@ -156,20 +180,14 @@ const Question = () => {
                         </VStack>
                       </RadioGroup>
                       {invalid && (
-                        <FormErrorMessage
-                          bgColor="red.100"
-                          borderRadius="5px"
-                          p="1rem"
-                          color="black"
-                          w="100%"
-                        >
+                        <FormErrorMessage bgColor="red.100" borderRadius="5px" p="1rem" color="black" w="100%">
                           {error?.message}
                         </FormErrorMessage>
                       )}
                       {questions.length - 1 === idx && (
                         <Flex mt="3rem" w="100%">
                           <Spacer />
-                          <Button size="lg" colorScheme="teal" type="submit">
+                          <Button size="lg" colorScheme="teal" type="submit" w={{ base: "100%", lg: "max-content" }}>
                             Submit
                           </Button>
                         </Flex>
@@ -178,8 +196,7 @@ const Question = () => {
                   );
                 }}
                 rules={{
-                  required:
-                    "Harap pilih salah satu yang sesuai dengan kondisi kamu.",
+                  required: "Harap pilih salah satu yang sesuai dengan kondisi kamu.",
                 }}
               />
             ))}
