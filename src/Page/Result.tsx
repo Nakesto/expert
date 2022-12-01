@@ -1,5 +1,9 @@
 import {
   Box,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
   Center,
   Container,
   Divider,
@@ -44,23 +48,24 @@ const Result: React.FC = () => {
     <Container>
       <VStack alignItems="start" spacing="2rem">
         <Box>
-          <Heading>Hasil Tes Level Depression </Heading>
-          <Divider />
-        </Box>
-        <Box mt="2rem">
-          <Heading fontSize="xl">Gejala yang dirasakan</Heading>
-          <UnorderedList spacing="0.2rem" mt="1rem">
-            {resultData?.answers
-              .filter((item: any) => Number(item.answer) > 0)
-              .map((answer: any, idx: number) => (
-                <ListItem key={`gejala-${idx}`}>{answer.gejala}</ListItem>
-              ))}
-          </UnorderedList>
-        </Box>
-        <Box>
           <Heading fontSize="xl">Hasil Diagnosis</Heading>
           <Text mt="1rem">{diagnosa}</Text>
         </Box>
+        <Card align="center">
+          <CardHeader>
+            <Heading size="md"> Gejala yang dirasakan</Heading>
+          </CardHeader>
+          <CardBody>
+            <UnorderedList spacing="0.2rem" mt="1rem">
+              {resultData?.answers
+                .filter((item: any) => Number(item.answer) > 0)
+                .map((answer: any, idx: number) => (
+                  <ListItem key={`gejala-${idx}`}>{answer.gejala}</ListItem>
+                ))}
+            </UnorderedList>
+          </CardBody>
+          <CardFooter></CardFooter>
+        </Card>
       </VStack>
     </Container>
   );

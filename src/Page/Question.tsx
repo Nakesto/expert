@@ -3,7 +3,10 @@ import {
   Box,
   Flex,
   Image,
+  Stack,
   Heading,
+  Text,
+  Center,
   Button,
   Container,
   RadioGroup,
@@ -15,7 +18,6 @@ import {
   FormErrorMessage,
   Icon,
   HStack,
-  Text,
   ButtonGroup,
   IconButton,
 } from "@chakra-ui/react";
@@ -104,8 +106,8 @@ const Question = () => {
       transition={transition}
       flexDir={{ base: "column" }}
     >
-      <ButtonGroup isAttached variant="outline" pos="fixed" bottom="1rem" right="1rem" zIndex={99}>
-        <Button disabled>
+      <ButtonGroup isAttached variant="outline" pos="fixed" bottom="1rem" right="1rem" zIndex={99} bgColor="white">
+        <Button pointerEvents="none">
           Qustion {questionIndex + 1}/{questionDOM?.length}
         </Button>
         <IconButton
@@ -131,16 +133,15 @@ const Question = () => {
         Kembali
       </Button>
       <Image
-        pos={{ lg: "fixed" }}
+        pos={{ base: "inherit", lg: "fixed" }}
         h={{ base: "50vh", lg: "100%" }}
         w={{ base: "100%", lg: "50%" }}
-        display={{ base: "none", lg: "block" }}
         objectFit="cover"
         src="https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
       />
-      <Box ml={{ base: 0, lg: "50%" }} w={{ base: "100%", lg: "50%" }}>
+      <Box ml={{ base: 0, lg: "50%" }} w={{ base: "100%", lg: "50%" }} p={{ base: "2rem 2rem", lg: "5rem 0" }}>
         <Container as="form" onSubmit={handleSubmit(handleOnSubmit)}>
-          <VStack spacing="5rem" sx={{ overflow: "hidden" }}>
+          <VStack spacing="5rem">
             {questions.map((q, idx) => (
               <Controller
                 key={`Q-${idx}`}
@@ -154,9 +155,7 @@ const Question = () => {
                       spacing="1.8rem"
                       key={`Q-${idx}`}
                       isInvalid={invalid}
-                      height="100vh"
                       className="question-group"
-                      justifyContent="center"
                     >
                       <FormLabel as={Heading} fontWeight="bold" fontSize="xl">
                         {q}
@@ -164,14 +163,7 @@ const Question = () => {
                       <RadioGroup w="100%" onChange={onChange} value={value}>
                         <VStack spacing="0.8rem">
                           {answers.map((a, idx) => (
-                            <Box
-                              w="100%"
-                              background="gray.50"
-                              borderRadius="15px"
-                              key={`A-${idx}`}
-                              padding="1rem"
-                              color="black"
-                            >
+                            <Box w="100%" background="gray.50" borderRadius="15px" key={`A-${idx}`} padding="1rem">
                               <Radio value={String(a.value)} w="100%">
                                 {a.label}
                               </Radio>
@@ -201,6 +193,12 @@ const Question = () => {
               />
             ))}
           </VStack>
+          <Flex mt="3rem">
+            <Spacer />
+            <Button size="lg" colorScheme="teal" type="submit">
+              Submit
+            </Button>
+          </Flex>
         </Container>
       </Box>
     </FlexMotion>
