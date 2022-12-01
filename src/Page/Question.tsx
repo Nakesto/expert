@@ -36,22 +36,7 @@ const Question = () => {
 
   const navigate = useNavigate();
 
-  const scrollTo = () => {
-    const questionDOM = document.querySelectorAll(".question-group");
-    setquestionDOM(questionDOM);
-    questionDOM.forEach((question) => {
-      question.addEventListener("change", () => {
-        const nextQuestion = question.nextElementSibling;
-        if (nextQuestion) {
-          nextQuestion.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-          setquestionIndex(questionIndex + 1);
-        }
-      });
-    });
-  };
+  const scrollTo = () => {};
 
   const goToQuestion = (index: number) => {
     if (questionDOM && index >= 0 && index < questionDOM.length) {
@@ -67,7 +52,21 @@ const Question = () => {
     document.body.style.overflow = "hidden";
 
     window.scrollTo(0, 0);
-    window.addEventListener("load", scrollTo);
+
+    const questionDOM = document.querySelectorAll(".question-group");
+    setquestionDOM(questionDOM);
+    questionDOM.forEach((question, idx) => {
+      question.addEventListener("change", () => {
+        const nextQuestion = question.nextElementSibling;
+        if (nextQuestion) {
+          nextQuestion.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          setquestionIndex(idx);
+        }
+      });
+    });
   }, []);
 
   const handleOnSubmit = (data: any) => {
@@ -175,14 +174,6 @@ const Question = () => {
                         <FormErrorMessage bgColor="red.100" borderRadius="5px" p="1rem" color="black" w="100%">
                           {error?.message}
                         </FormErrorMessage>
-                      )}
-                      {questions.length - 1 === idx && (
-                        <Flex mt="3rem" w="100%">
-                          <Spacer />
-                          <Button size="lg" colorScheme="teal" type="submit" w={{ base: "100%", lg: "max-content" }}>
-                            Submit
-                          </Button>
-                        </Flex>
                       )}
                     </VStack>
                   );
