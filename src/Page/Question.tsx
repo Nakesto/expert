@@ -67,6 +67,11 @@ const Question = () => {
         }
       });
     });
+    
+    return () => {
+       document.body.style.overflow = "auto";
+    }
+    
   }, []);
 
   const handleOnSubmit = (data: any) => {
