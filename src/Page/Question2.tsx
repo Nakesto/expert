@@ -31,19 +31,32 @@ const Question = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {}, []);
-
-  window.addEventListener("load", () => {
+  const scrollTo = () => {
     const questionDOM = document.querySelectorAll(".question-group");
     questionDOM.forEach((question) => {
       question.addEventListener("change", () => {
         const nextQuestion = question.nextElementSibling;
         if (nextQuestion) {
-          nextQuestion.scrollIntoView({ behavior: "smooth", block: "center" });
+          nextQuestion.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
         }
       });
     });
-  });
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    window.addEventListener("load", scrollTo);
+    window.scrollTo(0, 0);
+
+    return () => {
+      window.removeEventListener("load", scrollTo);
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   const handleOnSubmit = (data: any) => {
     console.log(data);
@@ -95,19 +108,16 @@ const Question = () => {
         Kembali
       </Button>
       <Image
-        pos={{ base: "inherit", lg: "fixed" }}
+        pos={{ lg: "fixed" }}
         h={{ base: "50vh", lg: "100%" }}
         w={{ base: "100%", lg: "50%" }}
+        display={{ base: "none", lg: "block" }}
         objectFit="cover"
         src="https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
       />
-      <Box
-        ml={{ base: 0, lg: "50%" }}
-        w={{ base: "100%", lg: "50%" }}
-        p={{ base: "2rem 2rem", lg: "5rem 0" }}
-      >
+      <Box ml={{ base: 0, lg: "50%" }} w={{ base: "100%", lg: "50%" }}>
         <Container as="form" onSubmit={handleSubmit(handleOnSubmit)}>
-          <VStack spacing="5rem">
+          <VStack spacing="5rem" sx={{ overflow: "hidden" }}>
             {questions.map((q, idx) => (
               <Controller
                 key={`Q-${idx}`}
@@ -124,7 +134,9 @@ const Question = () => {
                       spacing="1.8rem"
                       key={`Q-${idx}`}
                       isInvalid={invalid}
+                      height="100vh"
                       className="question-group"
+                      justifyContent="center"
                     >
                       <FormLabel as={Heading} fontWeight="bold" fontSize="xl">
                         {q}
@@ -138,6 +150,7 @@ const Question = () => {
                               borderRadius="15px"
                               key={`A-${idx}`}
                               padding="1rem"
+                              color="black"
                             >
                               <Radio value={String(a.value)} w="100%">
                                 {a.label}
@@ -157,6 +170,14 @@ const Question = () => {
                           {error?.message}
                         </FormErrorMessage>
                       )}
+                      {questions.length - 1 === idx && (
+                        <Flex mt="3rem" w="100%">
+                          <Spacer />
+                          <Button size="lg" colorScheme="teal" type="submit">
+                            Submit
+                          </Button>
+                        </Flex>
+                      )}
                     </VStack>
                   );
                 }}
@@ -167,12 +188,6 @@ const Question = () => {
               />
             ))}
           </VStack>
-          <Flex mt="3rem">
-            <Spacer />
-            <Button size="lg" colorScheme="teal" type="submit">
-              Submit
-            </Button>
-          </Flex>
         </Container>
       </Box>
     </FlexMotion>
