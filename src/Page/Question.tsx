@@ -20,23 +20,25 @@ import {
   HStack,
   ButtonGroup,
   IconButton,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { FlexMotion } from "../Shared/ChakraMotion";
 import { fade, transition } from "../Shared/Animation";
 import { answers, cfPakar, gejala, questions } from "../data/knowledge";
 import { useForm, Controller } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 const Question = () => {
-  const { handleSubmit, control, setFocus } = useForm();
+  const { handleSubmit, control } = useForm();
   const [questionDOM, setquestionDOM] = useState<NodeListOf<Element>>();
   const [questionIndex, setquestionIndex] = useState(0);
+  const [isDesktop] = useMediaQuery("(min-width: 62em)");
 
   const navigate = useNavigate();
-
-  const scrollTo = () => {};
+  const location = useLocation();
+  const testData = location.state;
 
   const goToQuestion = (index: number) => {
     if (questionDOM && index >= 0 && index < questionDOM.length) {
@@ -49,9 +51,14 @@ const Question = () => {
   };
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    if (!testData || testData?.userName.length <= 0) {
+      navigate("/test");
+    }
 
     window.scrollTo(0, 0);
+    if (isDesktop) {
+      document.body.style.overflow = "hidden";
+    }
 
     const questionDOM = document.querySelectorAll(".question-group");
     setquestionDOM(questionDOM);
@@ -67,16 +74,13 @@ const Question = () => {
         }
       });
     });
-    
+
     return () => {
-       document.body.style.overflow = "auto";
-    }
-    
-  }, []);
+      document.body.style.overflow = "auto";
+    };
+  }, [isDesktop]);
 
   const handleOnSubmit = (data: any) => {
-    console.log(data);
-
     let result = cfPakar[0] * data.answer[0];
     for (let i = 1; i < questions.length; i++) {
       const cfCombine = cfPakar[i] * data.answer[i];
@@ -91,6 +95,7 @@ const Question = () => {
 
     const testResult = {
       certaintyFactor: result,
+      userName: testData.userName,
       answers: questions.map((question, index) => {
         return {
           question: question,
@@ -112,7 +117,16 @@ const Question = () => {
       transition={transition}
       flexDir={{ base: "column" }}
     >
-      <ButtonGroup isAttached variant="outline" pos="fixed" bottom="1rem" right="1rem" zIndex={99} bgColor="white">
+      <ButtonGroup
+        isAttached
+        variant="outline"
+        pos="fixed"
+        bottom="1rem"
+        right="1rem"
+        zIndex={99}
+        bgColor="white"
+        display={{ base: "none", lg: "initial" }}
+      >
         <Button pointerEvents="none">
           Qustion {questionIndex + 1}/{questionDOM?.length}
         </Button>
@@ -145,7 +159,7 @@ const Question = () => {
         objectFit="cover"
         src="https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
       />
-      <Box ml={{ base: 0, lg: "50%" }} w={{ base: "100%", lg: "50%" }} p={{ base: "2rem 2rem", lg: "5rem 0" }}>
+      <Box ml={{ base: 0, lg: "50%" }} w={{ base: "100%", lg: "50%" }} p={{ base: "2rem 2rem 5rem 2rem", lg: 0 }}>
         <Container as="form" onSubmit={handleSubmit(handleOnSubmit)}>
           <VStack spacing="5rem">
             {questions.map((q, idx) => (
@@ -156,8 +170,10 @@ const Question = () => {
                 render={({ field: { onChange, value, ref }, fieldState: { invalid, error } }) => {
                   return (
                     <VStack
+                      h={{ base: "max-content", lg: "100vh" }}
                       as={FormControl}
                       alignItems="start"
+                      justifyContent="center"
                       spacing="1.8rem"
                       key={`Q-${idx}`}
                       isInvalid={invalid}
@@ -182,6 +198,14 @@ const Question = () => {
                           {error?.message}
                         </FormErrorMessage>
                       )}
+                      {idx === questions.length - 1 && (
+                        <Flex mt="3rem" w="100%">
+                          <Spacer />
+                          <Button size="lg" colorScheme="teal" type="submit">
+                            Submit
+                          </Button>
+                        </Flex>
+                      )}
                     </VStack>
                   );
                 }}
@@ -191,12 +215,6 @@ const Question = () => {
               />
             ))}
           </VStack>
-          <Flex mt="3rem">
-            <Spacer />
-            <Button size="lg" colorScheme="teal" type="submit">
-              Submit
-            </Button>
-          </Flex>
         </Container>
       </Box>
     </FlexMotion>

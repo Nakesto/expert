@@ -65,4 +65,31 @@ export const answers = [
   },
 ];
 
+export const result = [
+  {
+    id: "R01",
+    value: -0.2,
+    label: "Tidak Depresi",
+    recommendations: "Anda tidak perlu melakukan tindakan lebih lanjut, tetap jaga kesehatan mental anda.",
+  },
+  {
+    id: "R02",
+    value: 0.4,
+    label: "Depresi Ringan",
+    recommendations: "",
+  },
+  {
+    id: "R03",
+    value: 0.6,
+    label: "Depresi Sedang",
+    recommendations: "",
+  },
+  {
+    id: "R04",
+    value: 1,
+    label: "Depresi Berat",
+    recommendations: "Anda perlu bantuan profesional, segera lakukan konsultasi dengan psikolog.",
+  },
+];
+
 export const cfPakar = [1.0, 0.2, 0.8, 0.5, 0.4, 0.3, 0.8, 0.8, 1.0, 1.0, 0.3, 0.8, 1.0, 0.4, 0.2];

@@ -4,39 +4,37 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Center,
   Container,
   Divider,
   Heading,
   ListItem,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
   Text,
+  Th,
+  Thead,
+  Tr,
   UnorderedList,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { fade, transition } from "../Shared/Animation";
-import { FlexMotion } from "../Shared/ChakraMotion";
+import { result } from "../data/knowledge";
 
 const Result: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const resultData = location.state;
-  const [diagnosa, setDiagnosa] = useState("");
+  const [diagnosa, setDiagnosa] = useState<any>();
 
   useEffect(() => {
     if (resultData == null) {
       navigate("/");
     } else {
-      if (resultData.certaintyFactor > 0.6) {
-        setDiagnosa("Anda mengalami stres berat");
-      } else if (resultData.certaintyFactor > 0.4) {
-        setDiagnosa("Anda mengalami stres sedang");
-      } else if (resultData.certaintyFactor > -0.2) {
-        setDiagnosa("Anda mengalami stres ringan");
-      } else {
-        setDiagnosa("Anda tidak mengalami stress");
-      }
+      // console.log(result.find((res) => resultData.certaintyFactor < res.value));
+      setDiagnosa(result.find((res) => resultData.certaintyFactor < res.value));
     }
 
     return () => {
@@ -45,27 +43,52 @@ const Result: React.FC = () => {
   }, [resultData, navigate]);
 
   return (
-    <Container>
-      <VStack alignItems="start" spacing="2rem">
+    <Container py={{ base: "2rem", lg: "5rem" }}>
+      <Heading>Hi, {resultData.userName}!</Heading>
+      <VStack alignItems="start" spacing="2rem" mt="2rem">
         <Box>
-          <Heading fontSize="xl">Hasil Diagnosis</Heading>
-          <Text mt="1rem">{diagnosa}</Text>
+          <Heading fontSize="2xl">Test Result</Heading>
+          <Divider my="0.5rem" />
+          <Text mt="1rem">Anda mengalami {diagnosa?.label}</Text>
         </Box>
-        <Card align="center">
-          <CardHeader>
-            <Heading size="md"> Gejala yang dirasakan</Heading>
-          </CardHeader>
-          <CardBody>
-            <UnorderedList spacing="0.2rem" mt="1rem">
-              {resultData?.answers
-                .filter((item: any) => Number(item.answer) > 0)
-                .map((answer: any, idx: number) => (
-                  <ListItem key={`gejala-${idx}`}>{answer.gejala}</ListItem>
-                ))}
-            </UnorderedList>
-          </CardBody>
-          <CardFooter></CardFooter>
-        </Card>
+        <Box>
+          <Heading fontSize="2xl">Diagnosis</Heading>
+          <Divider my="0.5rem" />
+          <TableContainer>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>Code</Th>
+                  <Th>Depression Level</Th>
+                  <Th>Certainty Factor</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <Tr>
+                  <Td>{diagnosa?.id}</Td>
+                  <Td>{diagnosa?.label}</Td>
+                  <Td>{resultData.certaintyFactor}</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
+        <Box>
+          <Heading fontSize="2xl">Symtomps</Heading>
+          <Divider my="0.5rem" />
+          <UnorderedList spacing="0.2rem" mt="1rem">
+            {resultData?.answers
+              .filter((item: any) => Number(item.answer) > 0)
+              .map((answer: any, idx: number) => (
+                <ListItem key={`gejala-${idx}`}>{answer.gejala}</ListItem>
+              ))}
+          </UnorderedList>
+        </Box>
+        <Box>
+          <Heading fontSize="2xl">Recommendations</Heading>
+          <Divider my="0.5rem" />
+          <Text mt="1rem">{diagnosa?.recommendations}</Text>
+        </Box>
       </VStack>
     </Container>
   );

@@ -69,12 +69,14 @@ const Test = () => {
               size="lg"
               onChange={(e) => setValue(e.target.value)}
             />
-            <Link to="/test/question" style={{ width: "100%", display: "flex" }}>
+            <Flex w="100%">
               <Spacer />
-              <Button size="lg" disabled={!value} w={{ base: "100%", lg: "initial" }} colorScheme="teal">
-                Mulai Tes
-              </Button>
-            </Link>
+              <Link to="/test/question" state={{ userName: value }}>
+                <Button size="lg" disabled={!value} w={{ base: "100%", lg: "initial" }} colorScheme="teal">
+                  Mulai Tes
+                </Button>
+              </Link>
+            </Flex>
           </VStack>
         </Container>
       </Center>
