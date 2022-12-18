@@ -15,18 +15,18 @@ const Navbar = () => {
         paddingBottom="20px"
       >
         <Text fontSize="3xl" fontWeight="bold" textColor="white">
-          Depression
+          Depresi
         </Text>
         <Box width="20%" />
         <Flex direction="row" flex="1" justifyContent="end" alignItems="center">
           <Link to="/">
             <Text backgroundColor="transparent" textColor="white" fontWeight="bold">
-              Home
+              Beranda
             </Text>
           </Link>
           <Link to="/test" style={{ marginLeft: "40px" }}>
             <Button>
-              <Text textColor="teal.400"> Depression Test </Text>
+              <Text textColor="teal.400">Tes Depresi</Text>
             </Button>
           </Link>
         </Flex>

@@ -70,25 +70,29 @@ export const result = [
     id: "R01",
     value: -0.2,
     label: "Tidak Depresi",
-    recommendations: "Anda tidak perlu melakukan tindakan lebih lanjut, tetap jaga kesehatan mental anda.",
+    recommendations:
+      "Selamat kondisi kesehatan mental kamu sangat baik! Kamu tidak perlu melakukan tindakan lebih lanjut, tetap jaga kesehatan mental.",
   },
   {
     id: "R02",
     value: 0.4,
     label: "Depresi Ringan",
-    recommendations: "",
+    recommendations:
+      "Kamu perlu melakukan perawatan diri, seperti berolahraga, bermain, dan berkomunikasi dengan orang lain.",
   },
   {
     id: "R03",
     value: 0.6,
     label: "Depresi Sedang",
-    recommendations: "",
+    recommendations:
+      "Wah sepertinya depresi yang kamu alami mulai memuncak. Kurangi aktivitas yang terlalu berat dan beristirahatlah cukup, bila perlu lakukan konsultasi dengan psikolog yang kamu percaya.",
   },
   {
     id: "R04",
     value: 1,
     label: "Depresi Berat",
-    recommendations: "Anda perlu bantuan profesional, segera lakukan konsultasi dengan psikolog.",
+    recommendations:
+      "Sepertinya kamu mengalami depresi berat dan memerlukan bantuan profesional, segera lakukan konsultasi dengan student service di kampus mu atau psikolog yang kamu percaya.",
   },
 ];
 

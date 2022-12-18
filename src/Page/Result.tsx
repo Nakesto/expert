@@ -33,7 +33,6 @@ const Result: React.FC = () => {
     if (resultData == null) {
       navigate("/");
     } else {
-      // console.log(result.find((res) => resultData.certaintyFactor < res.value));
       setDiagnosa(result.find((res) => resultData.certaintyFactor < res.value));
     }
 
@@ -47,9 +46,11 @@ const Result: React.FC = () => {
       <Heading>Hi, {resultData.userName}!</Heading>
       <VStack alignItems="start" spacing="2rem" mt="2rem">
         <Box>
-          <Heading fontSize="2xl">Test Result</Heading>
+          <Heading fontSize="2xl">Hasil Tes</Heading>
           <Divider my="0.5rem" />
-          <Text mt="1rem">Anda mengalami {diagnosa?.label}</Text>
+          <Text mt="1rem">
+            Kondisi mental kamu saat ini adalah <b style={{ textTransform: "lowercase" }}>{diagnosa?.label}</b>
+          </Text>
         </Box>
         <Box>
           <Heading fontSize="2xl">Diagnosis</Heading>
@@ -74,7 +75,7 @@ const Result: React.FC = () => {
           </TableContainer>
         </Box>
         <Box>
-          <Heading fontSize="2xl">Symtomps</Heading>
+          <Heading fontSize="2xl">Gejala yang dialami</Heading>
           <Divider my="0.5rem" />
           <UnorderedList spacing="0.2rem" mt="1rem">
             {resultData?.answers
@@ -85,7 +86,7 @@ const Result: React.FC = () => {
           </UnorderedList>
         </Box>
         <Box>
-          <Heading fontSize="2xl">Recommendations</Heading>
+          <Heading fontSize="2xl">Rekomendasi </Heading>
           <Divider my="0.5rem" />
           <Text mt="1rem">{diagnosa?.recommendations}</Text>
         </Box>
